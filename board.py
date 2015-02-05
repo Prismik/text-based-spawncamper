@@ -1,19 +1,18 @@
-from board import Board
+from player import Player
 class Board:
 	def __init__(self, x, y):
-		self.x = x
-		self.y = y
-		self.player = None
+		self.matrix = [[None for _ in range(y)] for _ in range(x)] 
 
 	def printBoard(self):
-		for i in range(self.y):
+		for y in range(len(self.matrix)):
 			line = ""
-			for j in range(self.x):
-				line += "_"
+			for x in range(len(self.matrix[y])):
+				line += "_ "
 
 			print(line)
 
-	def addPlayer(self, x, y):
-		self.player = Player(x, y)
+	def addPlayer(self, player, x, y):
+		self.matrix[y][x] = player
 
-	def view
+	def view(self):
+		print("View")

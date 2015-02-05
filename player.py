@@ -1,12 +1,18 @@
+from direction import Direction
 class Player:
-	def __init__(self, name, x, y):
+	directions = ('North', 'East', 'South', 'West')
+
+	def __init__(self, name):
 		self.name = name
-		self.x = x
-		self.y = y;
+		self.direction = 0
 
 	def die(self):
 		print(name + " has died!")
 
-	def turn(side):
+	def turn(self, side):
 		if side < 0:
-			self.direction =  
+			self.direction = (self.direction + 1) % 4
+		else:
+			self.direction = self.direction - 1 if self.direction > 0 else 3
+
+		print("You are now looking " + str(self.direction))
