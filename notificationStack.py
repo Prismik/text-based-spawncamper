@@ -1,6 +1,6 @@
 class NotificationStack:
 	def __init__(self):
-		self.stack = [""] * 7
+		self.stack = [''] * 7
 		self.len = 0
 		self.index = 0
 
@@ -11,4 +11,4 @@ class NotificationStack:
 
 	def printStack(self):
 		for msg in self.stack:
-			print(msg + "\n")
+			print(msg)

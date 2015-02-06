@@ -5,7 +5,7 @@ class Command:
 		self.action = action
 
 	def help(self):
-		print(name + "\n" + h)
+		print(name + '\n' + h)
 
 	def action(self):
 		action()

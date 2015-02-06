@@ -5,9 +5,9 @@ class Board:
 
 	def printBoard(self):
 		for y in range(len(self.matrix)):
-			line = ""
+			line = ''
 			for x in range(len(self.matrix[y])):
-				line += "_ "
+				line += '_ '
 
 			print(line)
 
@@ -15,4 +15,4 @@ class Board:
 		self.matrix[y][x] = player
 
 	def view(self):
-		print("View")
+		print('View')
