@@ -26,10 +26,16 @@ class Client(asyncore.dispatcher):
 			return
 
 		data = json.loads(data.decode().strip())
-		self.stack.add(data['what'])
+		if data['what'] == 'result':
+			if data['value'] == 'dead':
+				threading.Thread(target=asyncore.loop, name="Asyncore Loop").exit()
+			else:
+				self.stack.add(data['value'])
+		else:
+			self.stack.add(data['what'])
 
 	def start(self):
-		commands = ['look', 'turn left', 'turn right', 'shoot', 'move']
+		commands = ['look', 'turn left', 'turn right', 'shoot', 'move', 'reload']
 		threading.Thread(target=asyncore.loop, name="Asyncore Loop").start()
 
 		while True:

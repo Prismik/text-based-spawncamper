@@ -22,6 +22,9 @@ class Player:
 
 		print('You are now looking ' + str(self.direction))
 
+	def shoot(self):
+		return self.weapon.shoot()
+
 	def reloadWeapon(self):
 		if self.bullets <= 0:
 			print('You need ammo.')

@@ -11,11 +11,12 @@ class Handler(asyncore.dispatcher):
 		self.player = player
 		self.board = board
 		self.commands = {
-			'look': Command('look', 'Look out for ennemies in front of you.', board.playerLook(self.player)), 
+			'look': Command('look', 'Look out for ennemies in front of you.', lambda: board.playerLook(self.player)), 
 			'turn left': Command('turn left', 'Turn to your left.', lambda: player.turn(-1)),
-			'turn right': Command('turn right', 'Turn to your right.', lambda: player.turn(1))
-			'shoot': Command('shoot', 'Shoot in front of you.', lambda: board.playerShoot(self.player))
-			'move': Command('move', 'Move where you are looking.', lambda: board.playerMove(self.player))
+			'turn right': Command('turn right', 'Turn to your right.', lambda: player.turn(1)),
+			'shoot': Command('shoot', 'Shoot in front of you.', lambda: board.playerShoot(self.player)),
+			'move': Command('move', 'Move where you are looking.', lambda: board.playerMove(self.player)),
+			'reload': Command('reload', 'Put some clips in your weapon.', lambda: player.reloadWeapon())
 		}
 
 	def handle_read(self):
@@ -25,7 +26,8 @@ class Handler(asyncore.dispatcher):
 
 		data = json.loads(data.decode().strip())
 		if data['what'] in self.commands:
-			self.commands.get(data['what']).action()
+			result = self.commands.get(data['what']).action()
+			self.send(json.dumps({'what':'result', 'value':result, 'who':'server'}).encode())
 
 	def handle_close(self):
 		print('Connection Closed')
@@ -54,5 +56,5 @@ class Server(asyncore.dispatcher):
 	def serve(Self):
 		asyncore.loop()
 
-s = Server('0.0.0.0', 5037)
+s = Server('0.0.0.0', 5017)
 s.serve()
