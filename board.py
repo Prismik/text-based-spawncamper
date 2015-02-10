@@ -14,39 +14,60 @@ class Board:
 
 	def addPlayer(self, player, x, y):
 		self.matrix[y][x] = player
+		player.x = x
+		player.y = y
 
-	def findPlayer(self, obj):
-		for y in range(len(self.matrix)):
-			for x in range(len(self.matrix[y])):
-				if self.at(x, y) == obj:
-					return self.at(x, y)
+	def playerMove(self, p):
+		if dir == 0:
+			if p.y - 1 >= 0:
+				if self.at(p.x, p.y - 1) is None:
+					self.movePlayerAt(p, p.x, p.y - 1)
+		elif dir == 1:	
+			if p.x + 1 < len(self.matrix[p.y]):
+				if self.at(p.x + 1, p.y) is None:
+					self.movePlayerAt(p, p.x + 1, p.y)
+		elif dir == 2:
+			if p.y + 1 < len(self.matrix):
+				if self.at(p.x, p.y + 1) is None:
+					self.movePlayerAt(p, p.x, p.y + 1)
+		elif dir == 3:
+			if p.x - 1 >= 0:
+				if self.at(p.x - 1, p.y) is None:
+					self.movePlayerAt(p, p.x - 1, p.y)
 
-	def movePlayer(self):
-		print('Moved')
+	def movePlayerAt(p, x, y):
+		self.matrix[y][x] = None
+		player.x = x
+		player.y = y
 
-	def killPlayer(self, player):
-		findPlayer(player).die()
-
-	def playerShoot(self, player):
-		player.shoot()
+	def playerShoot(self, p):
+		p.shoot()
+		collision = self.linearCollisionFrom(p.x, p.y, p.direction)
+		if collision is None:
+			return None
+		elif isinstance(collision, Player):
+			collision.die()
+			return collision
 
 	def linearCollisionFrom(self, x, y, dir):
 		if dir == 0:
 			for i in range(len(self.matrix) - y, 0, -1):
-				if self.at(x, i) is None:
+				if self.at(x, i) is not None:
 					return self.at(x, i)
 		elif dir == 1:
 			for i in range(len(self.matrix[y]) - x):
-				if self.at(i, y) is None:
+				if self.at(i, y) is not None:
 					return self.at(i, y)
 		elif dir == 2:
 			for i in range(len(self.matrix) - y):
-				if self.at(x, i) is None:
+				if self.at(x, i) is not None:
 					return self.at(x, i)
 		elif dir == 3:
 			for i in range(len(self.matrix[y]) - x, 0, -1):
-				if self.at(i, y) is None:
+				if self.at(i, y) is not None:
 					return self.at(i, y)
+
+		return None
 		
 	def at(self, x, y):
 		return self.matrix[y][x]

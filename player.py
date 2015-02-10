@@ -4,6 +4,8 @@ class Player:
 	directions = ('North', 'East', 'South', 'West')
 
 	def __init__(self, name):
+		self.x = 0
+		self.y = 0
 		self.bullets = 0
 		self.weapon = Weapon('Pistol', 7)
 		self.name = name
