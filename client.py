@@ -29,7 +29,7 @@ class Client(asyncore.dispatcher):
 		self.stack.add(data['what'])
 
 	def start(self):
-		commands = ['view', 'turn left', 'turn right']
+		commands = ['look', 'turn left', 'turn right', 'shoot', 'move']
 		threading.Thread(target=asyncore.loop, name="Asyncore Loop").start()
 
 		while True:
@@ -37,7 +37,6 @@ class Client(asyncore.dispatcher):
 			self.stack.printStack()
 			action = input('What to do: ')
 			if action in commands:
-				#self.request.sendall(bytes(json.dumps({'return':'ok'}), 'UTF-8'))
 				data = json.dumps({'what':action, 'who':self.name})
 				self.send(data.encode())
 

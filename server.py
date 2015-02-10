@@ -11,11 +11,11 @@ class Handler(asyncore.dispatcher):
 		self.player = player
 		self.board = board
 		self.commands = {
-			'view': Command('view', 'Look out for ennemies in front of you.', board.view), 
+			'look': Command('look', 'Look out for ennemies in front of you.', board.playerLook(self.player)), 
 			'turn left': Command('turn left', 'Turn to your left.', lambda: player.turn(-1)),
 			'turn right': Command('turn right', 'Turn to your right.', lambda: player.turn(1))
-			'shoot': Command('shoot', 'Shoot in front of you.', lambda: player.shoot())
-			'move': Command('move', 'Move where you are looking.', lambda: player.move())
+			'shoot': Command('shoot', 'Shoot in front of you.', lambda: board.playerShoot(self.player))
+			'move': Command('move', 'Move where you are looking.', lambda: board.playerMove(self.player))
 		}
 
 	def handle_read(self):

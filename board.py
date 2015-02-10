@@ -22,23 +22,27 @@ class Board:
 			if p.y - 1 >= 0:
 				if self.at(p.x, p.y - 1) is None:
 					self.movePlayerAt(p, p.x, p.y - 1)
+					return True
 		elif dir == 1:	
 			if p.x + 1 < len(self.matrix[p.y]):
 				if self.at(p.x + 1, p.y) is None:
 					self.movePlayerAt(p, p.x + 1, p.y)
+					return True
 		elif dir == 2:
 			if p.y + 1 < len(self.matrix):
 				if self.at(p.x, p.y + 1) is None:
 					self.movePlayerAt(p, p.x, p.y + 1)
+					return True
 		elif dir == 3:
 			if p.x - 1 >= 0:
 				if self.at(p.x - 1, p.y) is None:
 					self.movePlayerAt(p, p.x - 1, p.y)
+					return True
 
-	def movePlayerAt(p, x, y):
-		self.matrix[y][x] = None
-		player.x = x
-		player.y = y
+		return False
+
+	def playerLook(self, p):
+		return self.linearCollisionFrom(p.x, p.y, p.direction)
 
 	def playerShoot(self, p):
 		p.shoot()
@@ -48,6 +52,11 @@ class Board:
 		elif isinstance(collision, Player):
 			collision.die()
 			return collision
+
+	def movePlayerAt(p, x, y):
+		self.matrix[y][x] = None
+		player.x = x
+		player.y = y
 
 	def linearCollisionFrom(self, x, y, dir):
 		if dir == 0:
@@ -71,6 +80,3 @@ class Board:
 		
 	def at(self, x, y):
 		return self.matrix[y][x]
-
-	def view(self):
-		print('View')
