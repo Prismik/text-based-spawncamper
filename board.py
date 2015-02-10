@@ -60,9 +60,10 @@ class Board:
 			return 'Your weapon is empty'
 
 	def movePlayerAt(self, p, x, y):
-		self.matrix[y][x] = None
-		player.x = x
-		player.y = y
+		self.matrix[p.y][p.x] = None
+		self.matrix[y][x] = p
+		p.x = x
+		p.y = y
 
 	def linearCollisionFrom(self, x, y, dir):
 		if dir == 0 and y != 0:
