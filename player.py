@@ -3,7 +3,8 @@ from weapon import Weapon
 class Player:
 	directions = ('North', 'East', 'South', 'West')
 
-	def __init__(self, name):
+	def __init__(self, name, handler):
+		self.handler = handler
 		self.x = 0
 		self.y = 0
 		self.bullets = 999 # Should be enough in a single game
@@ -11,8 +12,8 @@ class Player:
 		self.name = name
 		self.direction = 0
 
-	def die(self):
-		print(name + ' has died!')
+	def die(self, by):
+		handler.send(json.dumps({'what':'dead', 'who': by}).encode())
 
 	def turn(self, side):
 		if side > 0:
@@ -20,14 +21,19 @@ class Player:
 		else:
 			self.direction = self.direction - 1 if self.direction > 0 else 3
 
-		print('You are now looking ' + str(self.direction))
+		return 'You are now looking ' + Player.directions[self.direction]
 
 	def shoot(self):
 		return self.weapon.shoot()
 
 	def reloadWeapon(self):
 		if self.bullets <= 0:
-			print('You need ammo.')
+			return 'You cleverly load air into your gun'
 		else:
 			usedBullets = self.weapon.reload(self.bullets)
-			self.bullets -= usedBullets
+			if usedBullets == 0:
+				self.bullets -= 1
+				return 'Your try to load a bullet, but it falls to the floor'
+			else:
+				self.bullets -= usedBullets
+				return 'You put ' + str(usedBullets) + ' bullets in your gun'

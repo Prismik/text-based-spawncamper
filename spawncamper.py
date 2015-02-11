@@ -18,7 +18,7 @@ def play():
 	print(' ====-=-===========================-=-==== ')
 	name = input('Your spawncamper name: ')
 	#host = input('Spawncamper Server address: ')
-	c = Client('127.0.0.1', 5017, name)
+	c = Client('127.0.0.1', 5037, name)
 	c.start()
 
 while True:
