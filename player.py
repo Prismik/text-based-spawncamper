@@ -6,7 +6,7 @@ class Player:
 	def __init__(self, name):
 		self.x = 0
 		self.y = 0
-		self.bullets = 0
+		self.bullets = 999 # Should be enough in a single game
 		self.weapon = Weapon('Pistol', 7)
 		self.name = name
 		self.direction = 0
@@ -15,7 +15,7 @@ class Player:
 		print(name + ' has died!')
 
 	def turn(self, side):
-		if side < 0:
+		if side > 0:
 			self.direction = (self.direction + 1) % 4
 		else:
 			self.direction = self.direction - 1 if self.direction > 0 else 3

@@ -22,22 +22,22 @@ class Board:
 			if p.y != 0:
 				if self.at(p.x, p.y - 1) is None:
 					self.movePlayerAt(p, p.x, p.y - 1)
-					return 'You successfully moved'
+					return 'You successfully moved north'
 		elif p.direction == 1:	
 			if p.x != len(self.matrix[p.y]) - 1:
 				if self.at(p.x + 1, p.y) is None:
 					self.movePlayerAt(p, p.x + 1, p.y)
-					return 'You successfully moved'
+					return 'You successfully moved east'
 		elif p.direction == 2:
 			if p.y != len(self.matrix) - 1:
 				if self.at(p.x, p.y + 1) is None:
 					self.movePlayerAt(p, p.x, p.y + 1)
-					return 'You successfully moved'
+					return 'You successfully moved south'
 		elif p.direction == 3:
 			if p.x != 0:
 				if self.at(p.x - 1, p.y) is None:
 					self.movePlayerAt(p, p.x - 1, p.y)
-					return 'You successfully moved'
+					return 'You successfully moved west'
 
 		return 'You could not move'
 

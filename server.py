@@ -18,7 +18,16 @@ class Handler(asyncore.dispatcher):
 			'move': Command('move', 'Move where you are looking.', lambda: board.playerMove(self.player)),
 			'reload': Command('reload', 'Put some clips in your weapon.', lambda: player.reloadWeapon())
 		}
-
+		self.send(json.dumps({'what':'init',
+													'state': {
+														'bullets': self.player.bullets, 
+														'gun': {
+															'bullets': self.player.weapon.bullets,
+															'cap': self.player.weapon.capacity
+														},
+														'dir': self.player.direction
+													}, 
+													'who':'server'}).encode())
 	def handle_read(self):
 		data = self.recv(1024)
 		if not data:
@@ -27,7 +36,17 @@ class Handler(asyncore.dispatcher):
 		data = json.loads(data.decode().strip())
 		if data['what'] in self.commands:
 			result = self.commands.get(data['what']).action()
-			self.send(json.dumps({'what':'result', 'value':result, 'who':'server'}).encode())
+			self.send(json.dumps({'what':'result', 
+														'value':result, 
+														'state': {
+															'bullets': self.player.bullets, 
+															'gun': {
+																'bullets': self.player.weapon.bullets,
+																'cap': self.player.weapon.capacity
+															},
+															'dir': self.player.direction
+														}, 
+														'who':'server'}).encode())
 
 	def handle_close(self):
 		print('Connection Closed')
