@@ -1,6 +1,5 @@
 from player import Player
 class Board:
-
 	def __init__(self, x, y):
 		self.matrix = [[None for _ in range(y)] for _ in range(x)] 
 
@@ -8,8 +7,10 @@ class Board:
 		for y in range(len(self.matrix)):
 			line = ''
 			for x in range(len(self.matrix[y])):
-				line += '_ '
-
+				if (self.matrix[y][x] == None):
+					line += 'O '
+				else:
+					line += 'X '
 			print(line)
 
 	def addPlayer(self, player, x, y):
@@ -17,6 +18,9 @@ class Board:
 		player.x = x
 		player.y = y
 
+	def removePlayer(self, player):
+		self.matrix[player.y][player.x] = None
+		
 	def playerMove(self, p):
 		if p.direction == 0:
 			if p.y != 0:
@@ -82,7 +86,6 @@ class Board:
 			for i in range(x - 1, 0, -1):
 				if self.at(i, y) is not None:
 					return self.at(i, y)
-
 		return None
 		
 	def at(self, x, y):

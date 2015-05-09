@@ -3,8 +3,8 @@ from weapon import Weapon
 class Player:
 	directions = ('North', 'East', 'South', 'West')
 
-	def __init__(self, name, handler):
-		self.handler = handler
+	def __init__(self, name):
+		self.handler = None
 		self.x = 0
 		self.y = 0
 		self.bullets = 999 # Should be enough in a single game
@@ -13,7 +13,7 @@ class Player:
 		self.direction = 0
 
 	def die(self, by):
-		handler.send(json.dumps({'what':'dead', 'who': by}).encode())
+		self.handler.send(json.dumps({'what':'dead', 'who': by}).encode())
 
 	def turn(self, side):
 		if side > 0:

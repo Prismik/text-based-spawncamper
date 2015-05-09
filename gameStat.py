@@ -7,4 +7,4 @@ class GameStat:
 		self.kill = 0
 
 	def printStats(self):
-		print('You did ' + self.ritations + ' rotations.')
+		print('You did ' + self.rotations + ' rotations.')
