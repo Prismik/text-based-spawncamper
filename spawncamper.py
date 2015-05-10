@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import os
-from utils import Utils
-from client import Client
+import client.utils as utils
+from client.client import Client
 
 def exit():
 	raise SystemExit
@@ -17,13 +17,16 @@ def play():
 	print('==    |  3 - Disconnect upon death  |    ==')
 	print('==    |                             |    ==')
 	print(' ====-=-===========================-=-==== ')
-	name = utils.io.pyin('Your spawncamper name: ')
+	name = utils.io().pyin('Your spawncamper name: ')
 	#host = input('Spawncamper Server address: ')
 	c = Client('127.0.0.1', 5017, name)
 	c.start()
 
 def main(screen=None):
-	utils.io.setScreen(screen)
+	print('ok-----')
+	print('')
+	print(screen)
+	utils.io().setScreen(screen)
 	while True:
 		action = utils.io.pyin('What to do: ')
 		if action == 'exit':
@@ -33,5 +36,5 @@ def main(screen=None):
 		else:
 			print("I don't know...")
 
-Utils.init(main)
+utils.io(main)
 main()

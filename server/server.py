@@ -80,7 +80,7 @@ class Server(asyncore.dispatcher):
 		self.board.addPlayer(player, 0, 0)
 		self.HANDLER(sock, player, self.board)
 
-	def serve(Self):
+	def serve(self):
 		asyncore.loop()
 
 s = Server('0.0.0.0', 5017)

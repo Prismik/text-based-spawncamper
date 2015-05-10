@@ -1,9 +1,6 @@
-import asyncore, socket, os, threading, json, utils
-from command import Command
-from board import Board
-from player import Player
-from notificationStack import NotificationStack
-from gameUI import GameUI 
+import asyncore, socket, os, threading, json
+from . notificationStack import NotificationStack
+from . gameUI import GameUI 
 
 class Client(asyncore.dispatcher):
 	def __init__(self, host, port, name):

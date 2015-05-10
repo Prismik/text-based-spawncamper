@@ -1,8 +1,8 @@
 import platform
 try:
-	from winInput import WinInputHandler
+	from . winInput import WinInputHandler
 except ImportError:
-	from nixInput import NixInputHandler	
+	from . nixInput import NixInputHandler	
 
 class InputHandler:
 	def __init__(self, owner):

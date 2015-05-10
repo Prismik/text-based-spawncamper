@@ -5,9 +5,6 @@ import threading
 class NixInputHandler:
 	def __init__(self, owner):
 		self.terminated = False
-		print('ok-----')
-		print('')
-		print(owner)
 		curses.wrapper(owner)
 		print('Playing on a Unix sytem')
 
