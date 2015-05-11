@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import os
+import os, curses
 import client.utils as utils
 from client.client import Client
 
@@ -7,34 +7,31 @@ def exit():
 	raise SystemExit
 
 def play():
-	os.system('clear')
-	print(' ====-_-= S P A W N | C A M P E R =-_-==== ')
-	print('==    |                             |    ==')
-	print('==    |         R U L E S           |    ==')
-	print('==    |                             |    ==')
-	print('==    |  1 - Shoot stuff            |    ==')
-	print('==    |  2 - Reload when needed     |    ==')
-	print('==    |  3 - Disconnect upon death  |    ==')
-	print('==    |                             |    ==')
-	print(' ====-=-===========================-=-==== ')
-	name = utils.io().pyin('Your spawncamper name: ')
+	utils.std.clear()
+	utils.std.pyout(' ====-_-= S P A W N | C A M P E R =-_-==== ')
+	utils.std.pyout('==    |                             |    ==')
+	utils.std.pyout('==    |         R U L E S           |    ==')
+	utils.std.pyout('==    |                             |    ==')
+	utils.std.pyout('==    |  1 - Shoot stuff            |    ==')
+	utils.std.pyout('==    |  2 - Reload when needed     |    ==')
+	utils.std.pyout('==    |  3 - Disconnect upon death  |    ==')
+	utils.std.pyout('==    |                             |    ==')
+	utils.std.pyout(' ====-=-===========================-=-==== ')
+	name = utils.std.pyin('Your spawncamper name: ')
 	#host = input('Spawncamper Server address: ')
 	c = Client('127.0.0.1', 5017, name)
 	c.start()
 
-def main(screen=None):
-	print('ok-----')
-	print('')
-	print(screen)
-	utils.io().setScreen(screen)
+def main(screen):
+	utils.io(screen)
 	while True:
-		action = utils.io.pyin('What to do: ')
+		action = utils.std.pyin('What to do: ')
 		if action == 'exit':
 			exit()
 		elif action == 'play':
 			play()
 		else:
-			print("I don't know...")
+			utils.std.pyout("I don't know...")
 
-utils.io(main)
+curses.wrapper(main)
 main()

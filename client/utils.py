@@ -1,9 +1,12 @@
 from . io.inputHandler import InputHandler
 
 std = None
-def io(owner=None):
+def io(screen=None):
 	global std
-	if (std == None):
-		std = InputHandler(owner)
 
+	print(screen)
+	if (std is None):
+		std = InputHandler(screen)
+
+	print(std)
 	return std

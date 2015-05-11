@@ -5,21 +5,21 @@ except ImportError:
 	from . nixInput import NixInputHandler	
 
 class InputHandler:
-	def __init__(self, owner):
+	def __init__(self, window=None):
 		self.handler = None
 		sys = platform.system()
 		if (sys == 'Windows'):
 			self.handler = WinInputHandler()
 		elif (sys == 'Linux' or sys == 'Darwin'):
-			self.handler = NixInputHandler(owner)
+			self.handler = NixInputHandler(window)
 		else:
-			print ('OS not supported') # TODO Handle that
+			pass # TODO Handle that
 
 	def pyin(self, prompt=None):
 		return self.handler.pyin(prompt)
 
-	def setScreen(self, screen):
-		self.handler.setScreen(screen)
+	def pyout(self, msg):
+		self.handler.pyout(msg)
 
 	def terminate(self):
 		self.handler.terminated = True
