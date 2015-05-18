@@ -1,63 +1,71 @@
+import client.utils as utils
+from . io.colorama import Fore, Back, Style
 class GameUI:
-	def __init__(self):
-		self.playerBullets = 0
-		self.gunBullets = 0
-		self.gunCapacity = 0
-		self.direction = 0
+  def __init__(self):
+    self.playerBullets = 0
+    self.gunBullets = 0
+    self.gunCapacity = 0
+    self.direction = 0
+    self.hp = 0
 
-	def update(self, data):
-		self.playerBullets = data['bullets']
-		self.gunBullets = data['gun']['bullets']
-		self.gunCapacity = data['gun']['cap']
-		self.direction = data['dir']
+  def update(self, data):
+    self.playerBullets = data['bullets']
+    self.gunBullets = data['gun']['bullets']
+    self.gunCapacity = data['gun']['cap']
+    self.direction = data['dir']
+    self.hp = data['hp']
 
-	def printUI(self):
-		self.printCompass()
-		self.printGun()
+  def printUI(self):
+    self.printStatus()
+    self.printCompass()
 
-	def printCompass(self):
-		if self.direction == 0:
-			print("      N      ")
-			print("   __---__   ")
-			print("  -   ^   -  ")
-			print("W|    |    |E")
-			print("  _       _  ")
-			print("   --___--   ")
-			print("      S      ")
-		elif self.direction == 1:
-			print("      N      ")
-			print("   __---__   ")
-			print("  -       -  ")
-			print("W|    ---> |E")
-			print("  _       _  ")
-			print("   --___--   ")
-			print("      S      ")
-		elif self.direction == 2:
-			print("      N      ")
-			print("   __---__   ")
-			print("  -       -  ")
-			print("W|    |    |E")
-			print("  _   v   _  ")
-			print("   --___--   ")
-			print("      S      ")
-		elif self.direction == 3:
-			print("      N      ")
-			print("   __---__   ")
-			print("  -       -  ")
-			print("W| <---    |E")
-			print("  _       _  ")
-			print("   --___--   ")
-			print("      S      ")
+  def greenPrint(self, msg):
+    utils.std.pyout(Fore.GREEN + msg)
 
-	def printGun(self):
-		gun = "Ammo ["
-		b = self.gunBullets
-		for i in range(self.gunCapacity):
-			if b != 0:
-				gun += "|"
-				b -= 1
-			else:
-				gun += " "
+  def printCompass(self):
+    if self.direction == 0:
+      self.greenPrint("      N      ")
+      self.greenPrint("   __---__   ")
+      self.greenPrint("  -   ^   -  ")
+      self.greenPrint("W|    |    |E")
+      self.greenPrint("  _       _  ")
+      self.greenPrint("   --___--   ")
+      self.greenPrint("      S      ")
+    elif self.direction == 1:
+      self.greenPrint("      N      ")
+      self.greenPrint("   __---__   ")
+      self.greenPrint("  -       -  ")
+      self.greenPrint("W|    ---> |E")
+      self.greenPrint("  _       _  ")
+      self.greenPrint("   --___--   ")
+      self.greenPrint("      S      ")
+    elif self.direction == 2:
+      self.greenPrint("      N      ")
+      self.greenPrint("   __---__   ")
+      self.greenPrint("  -       -  ")
+      self.greenPrint("W|    |    |E")
+      self.greenPrint("  _   v   _  ")
+      self.greenPrint("   --___--   ")
+      self.greenPrint("      S      ")
+    elif self.direction == 3:
+      self.greenPrint("      N      ")
+      self.greenPrint("   __---__   ")
+      self.greenPrint("  -       -  ")
+      self.greenPrint("W| <---    |E")
+      self.greenPrint("  _       _  ")
+      self.greenPrint("   --___--   ")
+      self.greenPrint("      S      ")
 
-		gun += "]"
-		print(gun)
+  def printStatus(self):
+    heart = u"\u2764"
+    gun = "Ammo ["
+    b = self.gunBullets
+    for i in range(self.gunCapacity):
+      if b != 0:
+        gun += "|"
+        b -= 1
+      else:
+        gun += " "
+
+    gun += "]"
+    self.greenPrint(Fore.RED + Back.GREEN + heart + Fore.BLACK + '  ' + str(self.hp) + ' | ' + gun)
