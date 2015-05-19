@@ -9,7 +9,7 @@ class Client(asyncore.dispatcher):
     self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
     self.connect((host, port))
     self.stack = NotificationStack(1)
-    self.ui = GameUI()
+    self.ui = GameUI(name)
     self.name = name
     self.terminated = False
 
@@ -17,24 +17,24 @@ class Client(asyncore.dispatcher):
     self.stack.add('You are now connected.')
 
   def handle_close(self):
-    self.stack.add('Client: Connection Closed')
+    self.stack.add('You have left the game: Press enter to continue')
     self.close()
 
   def handle_read(self):
     data = self.recv(1024)
 
     if not data:
+      self.terminate()
       return
 
     data = json.loads(data.decode().strip())
     if data['what'] == 'result':
       if data['value'] == 'dead':
+        self.stack.add('You have been killed. Press enter to leave')
         self.terminate()
       else:
         self.stack.add(data['value'])
         self.ui.update(data['state'])
-    elif data['what'] == 'close':
-      self.terminate()
     else:
       self.stack.add(data['what'])
 
@@ -52,9 +52,8 @@ class Client(asyncore.dispatcher):
       action = utils.std.pyin('> ')
       if not self.terminated:
         if action in commands:
-          data = json.dumps({'what':action, 'who':self.name})
+          data = json.dumps({'what': action, 'who': self.name})
           self.send(data.encode())
       else:
-        print('Goodbye')
-
+        utils.std.clear()
 

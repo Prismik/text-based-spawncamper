@@ -9,6 +9,7 @@ class Handler(asyncore.dispatcher):
     self.player = player
     self.player.handler = self
     self.board = board
+    self.terminated = False
     self.commands = {
       'look': Command('look', 'Look out for ennemies in front of you.', lambda: board.playerLook(self.player)), 
       'turn left': Command('turn left', 'Turn to your left.', lambda: player.turn(-1)),
@@ -16,32 +17,21 @@ class Handler(asyncore.dispatcher):
       'shoot': Command('shoot', 'Shoot in front of you.', lambda: board.playerShoot(self.player)),
       'move': Command('move', 'Move where you are looking.', lambda: board.playerMove(self.player)),
       'reload': Command('reload', 'Put some clips in your weapon.', lambda: player.reloadWeapon()),
-      'exit': Command('exit', 'Leave the game.', lambda: self.playerExit())
+      'exit': Command('exit', 'Leave the game.', lambda: self.terminate())
     }
-    self.sendResult()
+    self.sendResult('Welcome to Spawncamper')
 
-  def playerExit(self):
+  def terminate(self):
     self.board.removePlayer(self.player) 
+    self.terminated = True
     self.handle_close()
 
-  def handle_read(self):
-    data = self.recv(1024)
-    if not data:
-      return
+  def sendJson(self, data):
+    self.send(json.dumps(data).encode())
 
-    data = json.loads(data.decode().strip())
-    if data['what'] in self.commands:
-      result = self.commands.get(data['what']).action()
-      self.sendResult()
-
-      self.board.printBoard()
-
-  def sendJson(self, json):
-    self.send(json.dumps(json).encode())
-
-  def sendResult(self):
+  def sendResult(self, result):
     self.sendJson({'what':'result', 
-                            'value':result, 
+                            'value': result, 
                             'state': {
                               'hp': self.player.hp,
                               'bullets': self.player.bullets, 
@@ -53,9 +43,21 @@ class Handler(asyncore.dispatcher):
                             }, 
                             'who':'server'})
 
+  def handle_read(self):
+    data = self.recv(1024)
+    if not data:
+      return
+
+    data = json.loads(data.decode().strip())
+    if data['what'] in self.commands:
+      result = self.commands.get(data['what']).action()
+    if result:
+      self.sendResult(result)
+      self.board.printBoard()
+
   def handle_close(self):
     print('Connection Closed')
-    self.sendJson({'what': 'close'})
+    # self.server.connections.remove(self)
     self.close()
 
 class Server(asyncore.dispatcher):
@@ -71,7 +73,7 @@ class Server(asyncore.dispatcher):
 
   def handle_accept(self):
     (sock, addr) = self.accept()
-    self.connections.append(socket)
+    # self.connections.append(sock)
     print('Connection by ', addr)
     player = Player(str(addr))
     self.board.addPlayer(player, 0, 0)

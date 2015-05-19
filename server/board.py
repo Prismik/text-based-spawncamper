@@ -58,8 +58,8 @@ class Board:
       if collision is None:
         return 'You successfully hit nothing'
       elif isinstance(collision, Player):
-        collision.die(p.name)
-        return 'You killed ' + collision.name
+        collision.hurt(p.name)
+        return 'You hit ' + collision.name
     else:
       return 'Your weapon is empty'
 

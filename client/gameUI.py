@@ -1,7 +1,8 @@
 import client.utils as utils
 from . io.colorama import Fore, Back, Style
 class GameUI:
-  def __init__(self):
+  def __init__(self, name):
+    self.name = name
     self.playerBullets = 0
     self.gunBullets = 0
     self.gunCapacity = 0
@@ -68,4 +69,6 @@ class GameUI:
         gun += " "
 
     gun += "]"
-    self.greenPrint(Fore.RED + Back.GREEN + heart + Fore.BLACK + '  ' + str(self.hp) + ' | ' + gun)
+    utils.std.pyout(Back.GREEN + ' ' + Fore.BLACK + self.name + ' ' +
+      Fore.RED + heart + 
+      Fore.BLACK + '  ' + str(self.hp) + ' | ' + gun)
