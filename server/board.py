@@ -1,16 +1,38 @@
 from player import Player
+from wall import Wall
+from door import Door
+
 class Board:
   def __init__(self, x, y):
     self.matrix = [[None for _ in range(y)] for _ in range(x)] 
+    with open('map' + str(y) + str(x), 'r') as mapFile:
+      for i, line in enumerate(mapFile):
+        for j, tile in enumerate(line):
+          if tile != '\n':
+            self.matrix[i][j] = self.parseTile(tile)
+
+    self.printBoard()
+
+  def parseTile(self, char):
+    return {
+      '0': None,
+      'i': Wall(),
+      'd': Door()
+    }[char]
 
   def printBoard(self):
     for y in range(len(self.matrix)):
       line = ''
       for x in range(len(self.matrix[y])):
-        if (self.matrix[y][x] == None):
+        tile = self.matrix[y][x]
+        if tile == None:
           line += 'O '
-        else:
+        elif type(tile) is Player:
           line += 'X '
+        elif type(tile) is Door:
+          line += 'd '
+        elif type(tile) is Wall:
+          line += 'i '
       print(line)
 
   def addPlayer(self, player, x, y):
@@ -21,6 +43,7 @@ class Board:
   def removePlayer(self, player):
     self.matrix[player.y][player.x] = None
     
+  # TODO handle doors and walls
   def playerMove(self, p):
     if p.direction == 0:
       if p.y != 0:
@@ -45,13 +68,19 @@ class Board:
 
     return 'You could not move'
 
+  # TODO Handle doors and walls
   def playerLook(self, p):
     vision = self.linearCollisionFrom(p.x, p.y, p.direction)
     if vision is None:
       return 'You only see dust and rubbles'
-    else:
-      return 'You see something moving in the shadow'
+    elif type(vision) is Player:
+      return 'You see ' + vision.name + ' moving in the shadow'
+    elif type(vision) is Door:
+      return 'You see ' + if vision.isOpened: 'an opened door' else: 'a closed door'
+    elif type(vision) is Wall:
+      return 'You see a marvelously crafted wall'
 
+  # TODO Handle doors and walls
   def playerShoot(self, p):
     if p.shoot():
       collision = self.linearCollisionFrom(p.x, p.y, p.direction)
