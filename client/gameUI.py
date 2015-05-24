@@ -1,3 +1,4 @@
+import platform
 import client.utils as utils
 from . io.colorama import Fore, Back, Style
 class GameUI:
@@ -58,7 +59,8 @@ class GameUI:
       self.greenPrint("      S      ")
 
   def printStatus(self):
-    heart = u"\u2764"
+    heart = "O" if platform.system() == 'Windows' else "\u2764"
+
     gun = "Ammo ["
     b = self.gunBullets
     for i in range(self.gunCapacity):

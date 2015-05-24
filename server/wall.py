@@ -1,4 +1,4 @@
-class Wall:
+class Wall(Tile):
   def __init__(self):
     # Allows the wall to be destroyed by bullets stronger than it's armor
     self.destroyable = False 

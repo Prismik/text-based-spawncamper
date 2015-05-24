@@ -15,7 +15,7 @@ class Board:
 
   def parseTile(self, char):
     return {
-      '0': None,
+      '0': Tile(),
       'i': Wall(),
       'd': Door()
     }[char]
@@ -25,7 +25,7 @@ class Board:
       line = ''
       for x in range(len(self.matrix[y])):
         tile = self.matrix[y][x]
-        if tile == None:
+        if type(tile) is Tile:
           line += 'O '
         elif type(tile) is Player:
           line += 'X '
@@ -33,7 +33,7 @@ class Board:
           line += 'd '
         elif type(tile) is Wall:
           line += 'i '
-      print(line)
+      print(line + '\n')
 
   def addPlayer(self, player, x, y):
     self.matrix[y][x] = player
@@ -76,7 +76,7 @@ class Board:
     elif type(vision) is Player:
       return 'You see ' + vision.name + ' moving in the shadow'
     elif type(vision) is Door:
-      return 'You see ' + if vision.isOpened: 'an opened door' else: 'a closed door'
+      return 'You see ' + 'an opened door' if vision.isOpened else 'a closed door'
     elif type(vision) is Wall:
       return 'You see a marvelously crafted wall'
 

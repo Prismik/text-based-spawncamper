@@ -1,4 +1,4 @@
-class Door:
+class Door(Tile):
   def __init__(self):
     self.destroyable = False 
     self.isOpened = False

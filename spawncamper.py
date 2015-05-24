@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import os, curses
+import os
 import client.utils as utils
 from client.client import Client
 

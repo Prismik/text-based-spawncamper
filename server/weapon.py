@@ -1,4 +1,4 @@
-class Weapon:
+class Weapon(Entity):
   def __init__(self, name, cap):
     self.bullets = 0
     self.damage = 30
