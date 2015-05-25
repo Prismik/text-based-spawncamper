@@ -1,9 +1,11 @@
+from entity import Entity
 from weapon import Weapon
 
-class Player:
+class Player(Entity):
   directions = ('North', 'East', 'South', 'West')
 
   def __init__(self, name):
+    super().__init__()
     self.handler = None
     self.x = 0
     self.y = 0
@@ -12,6 +14,7 @@ class Player:
     self.weapon = Weapon('Pistol', 7)
     self.name = name
     self.direction = 0
+    self.lookedMessage = 'You see ' + self.name + ' moving in the shadow'
 
   def hurt(self, by, points):
     self.hp -= points

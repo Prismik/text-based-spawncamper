@@ -1,5 +1,8 @@
+from entity import Entity
+
 class Weapon(Entity):
   def __init__(self, name, cap):
+    super().__init__()
     self.bullets = 0
     self.damage = 30
     self.capacity = cap

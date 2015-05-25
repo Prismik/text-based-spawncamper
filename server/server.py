@@ -30,18 +30,20 @@ class Handler(asyncore.dispatcher):
     self.send(json.dumps(data).encode())
 
   def sendResult(self, result):
-    self.sendJson({'what':'result', 
-                            'value': result, 
-                            'state': {
-                              'hp': self.player.hp,
-                              'bullets': self.player.bullets, 
-                              'gun': {
-                                'bullets': self.player.weapon.bullets,
-                                'cap': self.player.weapon.capacity
-                              },
-                              'dir': self.player.direction
-                            }, 
-                            'who':'server'})
+    self.sendJson({
+      'what':'result', 
+      'value': result, 
+      'state': {
+        'hp': self.player.hp,
+        'bullets': self.player.bullets, 
+        'gun': {
+          'bullets': self.player.weapon.bullets,
+          'cap': self.player.weapon.capacity
+        },
+        'dir': self.player.direction
+      }, 
+      'who':'server'
+    })
 
   def handle_read(self):
     data = self.recv(1024)
@@ -76,7 +78,7 @@ class Server(asyncore.dispatcher):
     # self.connections.append(sock)
     print('Connection by ', addr)
     player = Player(str(addr))
-    self.board.addPlayer(player, 0, 0)
+    self.board.addPlayer(player)
     self.HANDLER(sock, player, self.board)
 
   def serve(self):
