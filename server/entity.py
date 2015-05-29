@@ -5,6 +5,9 @@ class Entity:
     self.canBeMovedOnto = True
     self.lookedMessage = 'You only see dust and rubbles'
 
+  def hurt(self, source, damage):
+    pass
+    
   def canLookThrough(self):
     return self.canSeeThrough
 

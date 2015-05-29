@@ -78,11 +78,8 @@ class Board:
   def playerShoot(self, p):
     if p.shoot():
       collision = self.linearCollisionFrom(p.x, p.y, p.direction)
-      if collision is None:
-        return 'You successfully hit nothing'
-      elif isinstance(collision, Player):
-        collision.hurt(p.name)
-        return 'You hit ' + collision.name
+      collision.hurt(p.name, 100)
+      return 'You hit something'
     else:
       return 'Your weapon is empty'
 

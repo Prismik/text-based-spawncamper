@@ -45,6 +45,10 @@ class Tile:
 
     return self.lookedMessage
 
+  def hurt(self, source, damage):
+    if self.entities:
+      self.entities[0].hurt(source, damage)
+
   def addEntity(self, entity):
     self.entities.append(entity)
 
