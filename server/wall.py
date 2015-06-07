@@ -3,22 +3,23 @@ from config import propertyValue
 
 class Wall(Tile):
   def __init__(self):
-    super().__init__()
+    super().__init__(self, False, False, 'i', 'You see a marvelously crafted wall')
     # Allows the wall to be destroyed by bullets stronger than it's armor
     self.destroyable = propertyValue("Wall.destroyable") == "True"
-    # Allows Look to go through this wall but without great info
-    self.canSeeThrough = False
-    self.canBeMovedOnto = False
+
     # The bullets damage soaked by the wall. The rest goes through
     self.armor = 100
 
-    self.charRepresentation = 'i'
-
-    self.lookedMessage = 'You see a marvelously crafted wall'
-
+  
+  # TODO Do we need a setter ?
+  # Why doesn't it use the super class function ?
+  @property
   def canLookThrough(self):
     return self.canSeeThrough
 
+  # TODO Do we need a setter ?
+  # Why doesn't it use the super class function ?
+  @property
   def canMoveTo(self):
     return self.canBeMovedOnto
 

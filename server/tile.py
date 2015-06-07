@@ -1,13 +1,13 @@
 from player import Player
 
 class Tile:
-  def __init__ (self):
+  def __init__ (self, canSeeThrough, canBeMovedOnto, charRepresentation, lookedMessage):
     self.messages = []
     self.entities = []
-    self.canSeeThrough = True
-    self.canBeMovedOnto = True
-    self.charRepresentation = 'O'
-    self.lookedMessage = 'You only see dust and rubbles'
+    self.canSeeThrough = canSeeThrough
+    self.canBeMovedOnto = canBeMovedOnto
+    self.charRepresentation = charRepresentation
+    self.lookedMessage = lookedMessage
 
   def canLookThrough(self):
     if not self.canSeeThrough:
