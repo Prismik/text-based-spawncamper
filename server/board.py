@@ -18,10 +18,11 @@ class Board:
 
     self.printBoard()
 
+  # canSeeThrough, canBeMovedOnto, charRepresentation, lookedMessage
   def parseTile(self, char):
     return {
-      '0': Tile(),
-      's': Tile(),
+      '0': Tile(True, True, '0', ''),
+      's': Tile(True, True, 's', ''),
       'i': Wall(),
       'd': Door()
     }[char]
@@ -38,34 +39,42 @@ class Board:
     index = random.randint(0, len(self.spawners) - 1)
     x = self.spawners[index]['x']
     y = self.spawners[index]['y']
-    self.matrix[y][x].addEntity(player)
+    self.at(x, y).addEntity(player)
     player.x = x
     player.y = y
 
   def removePlayer(self, player):
-    self.matrix[player.y][player.x].removeEntity(player);
+    self.at(x, y).removeEntity(player);
     
-  # TODO handle doors and walls
-  def playerMove(self, p):
+  def tileCoordsInFrontOfPlayer(self, p):
     if p.direction == 0:
       if p.y != 0:
-        if self.at(p.x, p.y - 1).canMoveTo():
-          self.movePlayerAt(p, p.x, p.y - 1)
-          return 'You successfully moved north'
+        return (p.x, p.y - 1)
     elif p.direction == 1:  
       if p.x != len(self.matrix[p.y]) - 1:
-        if self.at(p.x + 1, p.y).canMoveTo():
-          self.movePlayerAt(p, p.x + 1, p.y)
-          return 'You successfully moved east'
+        return (p.x + 1, p.y)
     elif p.direction == 2:
       if p.y != len(self.matrix) - 1:
-        if self.at(p.x, p.y + 1).canMoveTo():
-          self.movePlayerAt(p, p.x, p.y + 1)
-          return 'You successfully moved south'
+        return (p.x, p.y + 1)
     elif p.direction == 3:
       if p.x != 0:
-        if self.at(p.x - 1, p.y).canMoveTo():
-          self.movePlayerAt(p, p.x - 1, p.y)
+        return (p.x - 1, p.y)
+
+    return None
+
+  # TODO handle doors and walls
+  def playerMove(self, p):
+    coordsInFront = self.tileCoordsInFrontOfPlayer(p)
+    if coordsInFront is not None:
+      if self.at(coordsInFront[0], coordsInFront[1]).canMoveTo:
+        self.movePlayerAt(p, coordsInFront[0], coordsInFront[1])
+        if p.direction == 0:
+          return 'You successfully moved north'
+        elif p.direction == 1:
+          return 'You successfully moved east'
+        elif p.direction == 2:
+          return 'You successfully moved south'
+        elif p.direction == 3:
           return 'You successfully moved west'
 
     return 'You could not move there'
@@ -83,6 +92,16 @@ class Board:
     else:
       return 'Your weapon is empty'
 
+  def playerOpen(self, p):
+    coordsInFront = self.tileCoordsInFrontOfPlayer(p)
+    if coordsInFront is not None:
+      tile = self.at(coordsInFront[0], coordsInFront[1])
+      if tile is Door:
+        tile.open()
+        return 'You have opened a door'
+
+    return 'What are you trying to open?'
+
   def movePlayerAt(self, p, x, y):
     self.matrix[p.y][p.x].removeEntity(p)
     self.matrix[y][x].addEntity(p)
@@ -92,20 +111,22 @@ class Board:
   def linearCollisionFrom(self, x, y, dir):
     if dir == 0 and y != 0:
       for i in range(y - 1, 0, -1):
-        if not self.at(x, i).canLookThrough():
+        if not self.at(x, i).canLookThrough:
           return self.at(x, i)
     elif dir == 1 and x != len(self.matrix[y]) - 1:
       for i in range(x + 1, len(self.matrix[y]) - 1):
-        if not self.at(x, i).canLookThrough():
+        if not self.at(x, i).canLookThrough:
           return self.at(i, y)
     elif dir == 2 and y != len(self.matrix) - 1:
       for i in range(y + 1, len(self.matrix) - 1):
-        if not self.at(x, i).canLookThrough():
+        if not self.at(x, i).canLookThrough:
           return self.at(x, i)
     elif dir == 3 and x != 0:
       for i in range(x - 1, 0, -1):
-        if not self.at(x, i).canLookThrough():
+        if not self.at(x, i).canLookThrough:
           return self.at(i, y)
-    return Tile() #TODO change it
+
+    return Tile(True, True, '0', '0') #TODO change it
+
   def at(self, x, y):
     return self.matrix[y][x]

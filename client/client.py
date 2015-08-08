@@ -42,7 +42,7 @@ class Client(asyncore.dispatcher):
     self.terminated = True
 
   def start(self):
-    commands = ['look', 'turn left', 'turn right', 'shoot', 'move', 'reload', 'exit']
+    commands = ['open', 'look', 'turn left', 'turn right', 'shoot', 'move', 'reload', 'exit']
     threading.Thread(target=asyncore.loop, name="Asyncore Loop").start()
 
     while not self.terminated:

@@ -11,6 +11,7 @@ class Handler(asyncore.dispatcher):
     self.board = board
     self.terminated = False
     self.commands = {
+      'open': Command('open', 'Attempt to open something in front of you.', lambda: board.playerOpen(self.player)), 
       'look': Command('look', 'Look out for ennemies in front of you.', lambda: board.playerLook(self.player)), 
       'turn left': Command('turn left', 'Turn to your left.', lambda: player.turn(-1)),
       'turn right': Command('turn right', 'Turn to your right.', lambda: player.turn(1)),

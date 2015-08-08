@@ -1,6 +1,5 @@
 from entity import Entity
 from weapon import Weapon
-from config import propertyValue
 
 class Player(Entity):
   directions = ('North', 'East', 'South', 'West')
@@ -17,7 +16,7 @@ class Player(Entity):
     self.direction = 0
 
     self.canSeeThrough = False
-    self.canBeMovedOnto = propertyValue("Player.canBeMovedOnto") is "True"
+    self.canBeMovedOnto = False
     self.lookedMessage = 'You see ' + self.name + ' moving in the shadow'
 
   def hurt(self, by, points):

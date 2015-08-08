@@ -1,11 +1,10 @@
 from tile import Tile
-from config import propertyValue
 
 class Wall(Tile):
   def __init__(self):
-    super().__init__(self, False, False, 'i', 'You see a marvelously crafted wall')
+    super().__init__(False, False, 'i', 'You see a marvelously crafted wall')
     # Allows the wall to be destroyed by bullets stronger than it's armor
-    self.destroyable = propertyValue("Wall.destroyable") == "True"
+    self.destroyable = True
 
     # The bullets damage soaked by the wall. The rest goes through
     self.armor = 100
