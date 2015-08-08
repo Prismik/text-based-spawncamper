@@ -1,5 +1,5 @@
-from entity import Entity
-from weapon import Weapon
+from . entity import Entity
+from . weapon import Weapon
 
 class Player(Entity):
   directions = ('North', 'East', 'South', 'West')

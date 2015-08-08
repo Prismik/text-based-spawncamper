@@ -1,6 +1,6 @@
 import asyncore, socket, json
 from command import Command
-from player import Player
+from entity.player import Player
 from board.board import Board
 
 class Handler(asyncore.dispatcher):

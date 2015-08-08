@@ -1,4 +1,4 @@
-from entity import Entity
+from . entity import Entity
 
 class Weapon(Entity):
   def __init__(self, name, cap):
