@@ -11,6 +11,7 @@ class Handler(asyncore.dispatcher):
     self.board = board
     self.terminated = False
     self.commands = {
+      'close': Command('close', 'Attempt to close something in front of you.', lambda: board.playerClose(self.player)),
       'open': Command('open', 'Attempt to open something in front of you.', lambda: board.playerOpen(self.player)), 
       'look': Command('look', 'Look out for ennemies in front of you.', lambda: board.playerLook(self.player)), 
       'turn left': Command('turn left', 'Turn to your left.', lambda: player.turn(-1)),
@@ -85,5 +86,5 @@ class Server(asyncore.dispatcher):
   def serve(self):
     asyncore.loop()
 
-s = Server('0.0.0.0', 5017)
+s = Server('0.0.0.0', 5000)
 s.serve()

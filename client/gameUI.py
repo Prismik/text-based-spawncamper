@@ -1,6 +1,7 @@
 import platform
 import client.utils as utils
 from . io.colorama import Fore, Back, Style
+
 class GameUI:
   def __init__(self, name):
     self.name = name

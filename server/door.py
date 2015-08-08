@@ -3,17 +3,19 @@ from tile import Tile
 class Door(Tile):
   def __init__(self):
     self.destroyable = False 
-    self.isOpened = False
+    self.opened = False
     self.armor = 100
-    super().__init__(False, False, 'd', 'You see ' + 'an opened door' if self.isOpened else 'a closed door')
+    super().__init__(False, False, 'd', 'You see an opened door' if self.opened else 'You see a closed door')
   
   def open(self):
-    self.isOpened = True
-    self.canBeMovedOnto = True
+    self.opened = True
+    self.passable = True
+    return 'You opened a door'
 
   def close(self):
-    self.isOpened = False
-    self.canBeMovedOnto = False
+    self.opened = False
+    self.passable = False
+    return 'You closed a door'
 
   def canLookThrough(self):
-    return self.isOpened or (self.destroyable and self.armor <= 0)
+    return self.opened or (self.destroyable and self.armor <= 0)

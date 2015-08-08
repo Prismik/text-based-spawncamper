@@ -19,7 +19,7 @@ def play():
   utils.std.pyout(' ====-=-===========================-=-==== ')
   name = utils.std.pyin('Your spawncamper name: ')
   #host = input('Spawncamper Server address: ')
-  c = Client('127.0.0.1', 5017, name)
+  c = Client('127.0.0.1', 5000, name)
   c.start()
 
 def main(screen=None):

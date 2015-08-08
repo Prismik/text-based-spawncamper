@@ -14,10 +14,9 @@ class Player(Entity):
     self.weapon = Weapon('Pistol', 7)
     self.name = name
     self.direction = 0
-
     self.canSeeThrough = False
-    self.canBeMovedOnto = False
-    self.lookedMessage = 'You see ' + self.name + ' moving in the shadow'
+    self.passable = False
+    self.description = 'You see ' + self.name + ' moving in the shadow'
 
   def hurt(self, by, points):
     self.hp -= points
@@ -45,7 +44,7 @@ class Player(Entity):
       usedBullets = self.weapon.reload(self.bullets)
       if usedBullets == 0:
         self.bullets -= 1
-        return 'Your try to load a bullet, but it falls to the floor'
+        return 'You try to load a bullet, but it falls to the floor'
       else:
         self.bullets -= usedBullets
         return 'You put ' + str(usedBullets) + ' bullets in your gun'

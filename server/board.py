@@ -7,22 +7,21 @@ import random
 class Board:
   def __init__(self, x, y):
     self.spawners = []
-    self.matrix = [[None for _ in range(y)] for _ in range(x)] 
-    with open('map' + str(y) + str(x), 'r') as mapFile:
+    self.matrix = [[None for _ in range(x)] for _ in range(y)] 
+    with open('map' + str(x) + str(y), 'r') as mapFile:
       for i, line in enumerate(mapFile):
         for j, tile in enumerate(line):
           if tile != '\n':
-            self.matrix[i][j] = self.parseTile(tile)
+            self.matrix[j][i] = self.parseTile(tile)
             if tile is 's':
               self.spawners.append({ 'x':j, 'y':i })
 
     self.printBoard()
 
-  # canSeeThrough, canBeMovedOnto, charRepresentation, lookedMessage
   def parseTile(self, char):
     return {
-      '0': Tile(True, True, '0', ''),
-      's': Tile(True, True, 's', ''),
+      '0': Tile(True, True, '0', 'A tile'),
+      's': Tile(True, True, 's', 'A spawner'),
       'i': Wall(),
       'd': Door()
     }[char]
@@ -31,8 +30,9 @@ class Board:
     for y in range(len(self.matrix)):
       line = ''
       for x in range(len(self.matrix[y])):
-        line += self.matrix[y][x].toChar() + ' '
+        line += self.at(x, y).toChar() + ' '
       print(line)
+
     print('\n')
 
   def addPlayer(self, player):
@@ -62,11 +62,10 @@ class Board:
 
     return None
 
-  # TODO handle doors and walls
   def playerMove(self, p):
     coordsInFront = self.tileCoordsInFrontOfPlayer(p)
     if coordsInFront is not None:
-      if self.at(coordsInFront[0], coordsInFront[1]).canMoveTo:
+      if self.at(coordsInFront[0], coordsInFront[1]).canMoveTo():
         self.movePlayerAt(p, coordsInFront[0], coordsInFront[1])
         if p.direction == 0:
           return 'You successfully moved north'
@@ -79,11 +78,9 @@ class Board:
 
     return 'You could not move there'
 
-  # TODO Handle doors and walls
   def playerLook(self, p):
-    return self.linearCollisionFrom(p.x, p.y, p.direction).getLookedMessage()
+    return self.linearCollisionFrom(p.x, p.y, p.direction).describe()
 
-  # TODO Handle doors and walls
   def playerShoot(self, p):
     if p.shoot():
       collision = self.linearCollisionFrom(p.x, p.y, p.direction)
@@ -96,37 +93,46 @@ class Board:
     coordsInFront = self.tileCoordsInFrontOfPlayer(p)
     if coordsInFront is not None:
       tile = self.at(coordsInFront[0], coordsInFront[1])
-      if tile is Door:
-        tile.open()
-        return 'You have opened a door'
+      if type(tile) is Door:
+        return tile.open()
 
     return 'What are you trying to open?'
 
+  def playerClose(self, p):
+    coordsInFront = self.tileCoordsInFrontOfPlayer(p)
+    if coordsInFront is not None:
+      tile = self.at(coordsInFront[0], coordsInFront[1])
+      if type(tile) is Door:
+        tile.close()
+        return 'You have closed a door'
+
+    return 'What are you trying to close?'
+
   def movePlayerAt(self, p, x, y):
-    self.matrix[p.y][p.x].removeEntity(p)
-    self.matrix[y][x].addEntity(p)
+    self.at(p.x, p.y).removeEntity(p)
+    self.at(x, y).addEntity(p)
     p.x = x
     p.y = y
 
   def linearCollisionFrom(self, x, y, dir):
     if dir == 0 and y != 0:
-      for i in range(y - 1, 0, -1):
-        if not self.at(x, i).canLookThrough:
+      for i in range(y - 1, -1, -1):
+        if not self.at(x, i).canLookThrough():
           return self.at(x, i)
-    elif dir == 1 and x != len(self.matrix[y]) - 1:
-      for i in range(x + 1, len(self.matrix[y]) - 1):
-        if not self.at(x, i).canLookThrough:
+    elif dir == 1 and x != len(self.matrix[y]):
+      for i in range(x + 1, len(self.matrix[y])):
+        if not self.at(i, y).canLookThrough():
           return self.at(i, y)
-    elif dir == 2 and y != len(self.matrix) - 1:
-      for i in range(y + 1, len(self.matrix) - 1):
-        if not self.at(x, i).canLookThrough:
+    elif dir == 2 and y != len(self.matrix):
+      for i in range(y + 1, len(self.matrix)):
+        if not self.at(x, i).canLookThrough():
           return self.at(x, i)
     elif dir == 3 and x != 0:
-      for i in range(x - 1, 0, -1):
-        if not self.at(x, i).canLookThrough:
+      for i in range(x - 1, -1, -1):
+        if not self.at(i, y).canLookThrough():
           return self.at(i, y)
 
-    return Tile(True, True, '0', '0') #TODO change it
+    return Tile(True, True, '0', 'You only see dust and rubbles') #TODO change it
 
   def at(self, x, y):
-    return self.matrix[y][x]
+    return self.matrix[x][y]
