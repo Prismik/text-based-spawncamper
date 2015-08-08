@@ -1,7 +1,7 @@
 import asyncore, socket, json
 from command import Command
-from board import Board
 from player import Player
+from board.board import Board
 
 class Handler(asyncore.dispatcher):
   def __init__(self, sock, player, board):

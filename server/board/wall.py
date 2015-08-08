@@ -1,4 +1,4 @@
-from tile import Tile
+from . tile import Tile
 
 class Wall(Tile):
   def __init__(self):

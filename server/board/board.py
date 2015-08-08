@@ -1,7 +1,6 @@
-from player import Player
-from tile import Tile
-from wall import Wall
-from door import Door
+from . tile import Tile
+from . wall import Wall
+from . door import Door
 import random
 
 class Board:

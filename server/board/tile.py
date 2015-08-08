@@ -1,5 +1,3 @@
-from player import Player
-
 class Tile:
   def __init__ (self, canSeeThrough, passable, charRepresentation, description):
     self.messages = []
