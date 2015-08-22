@@ -24,7 +24,7 @@ class Player(Entity):
       self.die(by)
 
   def die(self, by):
-    self.handler.sendJson({'what':'dead', 'who': by})
+    self.handler.sendJson({'what': 'dead', 'who': by})
 
   def turn(self, side):
     if side > 0:
@@ -48,3 +48,6 @@ class Player(Entity):
       else:
         self.bullets -= usedBullets
         return 'You put ' + str(usedBullets) + ' bullets in your gun'
+        
+  def hear(self, sound):
+    self.handler.sendJson({'what':'hear', 'sound': sound})

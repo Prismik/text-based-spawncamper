@@ -14,9 +14,10 @@ class Board:
             self.matrix[j][i] = self.parseTile(tile)
             if tile is 's':
               self.spawners.append({ 'x':j, 'y':i })
-
+    
+    self.linkTilesTogether()
     self.printBoard()
-
+  
   def parseTile(self, char):
     return {
       '0': Tile(True, True, '0', 'A tile'),
@@ -24,6 +25,54 @@ class Board:
       'i': Wall(),
       'd': Door()
     }[char]
+
+  def linkTilesTogether(self):
+    for y in range(len(self.matrix)):
+      for x in range(len(self.matrix[y])):
+        self.createLinksForTileAt(x, y)
+
+  def createLinksForTileAt(self, x, y):
+    tile = self.at(x, y)
+    # north
+    if y != 0:
+      link = self.at(x, y - 1)
+      if type(link) is Tile:
+        tile.linkedTiles.add(link)
+    # north-east
+    if y != 0 and x != len(self.matrix[y]) - 1:
+      link = self.at(x + 1, y - 1)
+      if type(link) is Tile:
+        tile.linkedTiles.add(link)
+    # east
+    if x != len(self.matrix[y]) - 1:
+      link = self.at(x + 1, y)
+      if type(link) is Tile:
+        tile.linkedTiles.add(link)
+    # south-east
+    if y != len(self.matrix) - 1 and x != len(self.matrix[y] - 1:
+      link = self.at(x + 1, y + 1)
+      if type(link) is Tile:
+        tile.linkedTiles.add(link)
+    # south
+    if y != len(self.matrix) - 1:
+      link = self.at(x, y + 1)
+      if type(link) is Tile:
+        link.linkedTiles.add(link)
+    # south-west
+    if y != len(self.matrix) - 1 and x != 0:
+      link = self.at(x - 1, y + 1)
+      if type(link) is Tile:
+        link.linkedTiles.add(link)
+    # west
+    if x != 0:
+      link = self.at(x - 1, y)
+      if type(link) is Tile:
+        link.linkedTiles.add(link)
+    # north-west
+    if y != 0 and x != 0:
+      link = self.at(x - 1, y - 1)
+      if type(link) is Tile:
+        link.linkedTiles.add(link)
 
   def printBoard(self):
     for y in range(len(self.matrix)):

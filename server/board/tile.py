@@ -1,13 +1,28 @@
 from entity.player import Player
 
 class Tile:
-  def __init__ (self, canSeeThrough, passable, charRepresentation, description):
+  def __init__(self, canSeeThrough, passable, charRepresentation, description, x, y):
     self.messages = []
     self.entities = []
+    self.linkedTiles = set()
     self.canSeeThrough = canSeeThrough
     self.passable = passable
     self.charRepresentation = charRepresentation
     self.description = description
+    self.x = x
+    self.y = y
+
+  def __hash__(self):
+    return hash(self.x + self.y * 10)
+  
+  def __eq__(self, other):
+    if type(other) is Tile:
+      return ((self.x == other.x) and (self.y == other.y))
+    else:
+      return False
+  
+  def __ne__(self, other):
+    return (not self.__eq__(other))
 
   def describe(self):
     for entity in self.entities:
@@ -52,4 +67,12 @@ class Tile:
 
   def removeEntity(self, entity):
     self.entities.remove(entity)
+  
+  def emit(self, sound, amplitude):
+    if amplitude >= 0:
+      for tile in self.linkedTiles:
+        tile.emit(sound, amplitude - 1)
 
+      for entity in self.entities:
+        if type(entity) is Player:
+          entity.hear(sound)
