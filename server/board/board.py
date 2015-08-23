@@ -11,19 +11,19 @@ class Board:
       for i, line in enumerate(mapFile):
         for j, tile in enumerate(line):
           if tile != '\n':
-            self.matrix[j][i] = self.parseTile(tile)
+            self.matrix[j][i] = self.parseTile(tile, j, i)
             if tile is 's':
               self.spawners.append({ 'x':j, 'y':i })
     
     self.linkTilesTogether()
     self.printBoard()
   
-  def parseTile(self, char):
+  def parseTile(self, char, x, y):
     return {
-      '0': Tile(True, True, '0', 'A tile'),
-      's': Tile(True, True, 's', 'A spawner'),
-      'i': Wall(),
-      'd': Door()
+      '0': Tile(True, True, '0', 'A tile', x, y),
+      's': Tile(True, True, 's', 'A spawner', x, y),
+      'i': Wall(x, y),
+      'd': Door(x, y)
     }[char]
 
   def linkTilesTogether(self):
@@ -31,6 +31,7 @@ class Board:
       for x in range(len(self.matrix[y])):
         self.createLinksForTileAt(x, y)
 
+  # TODO Requires testing, not sure if the conditions are all correct
   def createLinksForTileAt(self, x, y):
     tile = self.at(x, y)
     # north
@@ -49,7 +50,7 @@ class Board:
       if type(link) is Tile:
         tile.linkedTiles.add(link)
     # south-east
-    if y != len(self.matrix) - 1 and x != len(self.matrix[y] - 1:
+    if y != len(self.matrix) - 1 and x != len(self.matrix[y]) - 1:
       link = self.at(x + 1, y + 1)
       if type(link) is Tile:
         tile.linkedTiles.add(link)
@@ -131,7 +132,9 @@ class Board:
 
   def playerShoot(self, p):
     if p.shoot():
+      self.at(p.x, p.y).emit('You hear a gun shot', 4)
       collision = self.linearCollisionFrom(p.x, p.y, p.direction)
+      collision.emit('You hear a bullet collision nearby', 3)
       collision.hurt(p.name, 100)
       return 'You hit something'
     else:
@@ -158,7 +161,9 @@ class Board:
 
   def movePlayerAt(self, p, x, y):
     self.at(p.x, p.y).removeEntity(p)
-    self.at(x, y).addEntity(p)
+    destination = self.at(x, y)
+    destination.addEntity(p)
+    destination.emit('You hear something moving', 1)
     p.x = x
     p.y = y
 
@@ -180,7 +185,7 @@ class Board:
         if not self.at(i, y).canLookThrough():
           return self.at(i, y)
 
-    return Tile(True, True, '0', 'You only see dust and rubbles') #TODO change it
+    return Tile(True, True, '0', 'You only see dust and rubbles', -1, -1) #TODO change it
 
   def at(self, x, y):
     return self.matrix[x][y]

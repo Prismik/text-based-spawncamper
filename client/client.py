@@ -8,7 +8,7 @@ class Client(asyncore.dispatcher):
     asyncore.dispatcher.__init__(self)
     self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
     self.connect((host, port))
-    self.stack = NotificationStack(1)
+    self.stack = NotificationStack(3)
     self.ui = GameUI(name)
     self.name = name
     self.terminated = False
@@ -35,6 +35,8 @@ class Client(asyncore.dispatcher):
       else:
         self.stack.add(data['value'])
         self.ui.update(data['state'])
+    elif data['what'] == 'hear':
+      self.stack.add(data['sound'])
     else:
       self.stack.add(data['what'])
 

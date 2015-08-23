@@ -50,4 +50,4 @@ class Player(Entity):
         return 'You put ' + str(usedBullets) + ' bullets in your gun'
         
   def hear(self, sound):
-    self.handler.sendJson({'what':'hear', 'sound': sound})
+    self.handler.sendJson({'what': 'hear', 'sound': sound})

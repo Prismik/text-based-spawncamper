@@ -71,8 +71,14 @@ class Tile:
   def emit(self, sound, amplitude):
     if amplitude >= 0:
       for tile in self.linkedTiles:
-        tile.emit(sound, amplitude - 1)
+        tile.propagate(sound, amplitude - 1, set([self]))
 
-      for entity in self.entities:
-        if type(entity) is Player:
-          entity.hear(sound)
+  def propagate(self, sound, amplitude, propagatedTiles):
+    propagatedTiles.add(self)
+    tilesToPropagate = self.linkedTiles.difference(propagatedTiles)
+    for tile in tilesToPropagate:
+      tile.propagate(sound, amplitude - 1, propagatedTiles)
+
+    for entity in self.entities:
+      if type(entity) is Player:
+        entity.hear(sound)

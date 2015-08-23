@@ -1,8 +1,8 @@
 from . tile import Tile
 
 class Wall(Tile):
-  def __init__(self):
-    super().__init__(False, False, 'i', 'You see a marvelously crafted wall')
+  def __init__(self, x, y):
+    super().__init__(False, False, 'i', 'You see a marvelously crafted wall', x, y)
     # Allows the wall to be destroyed by bullets stronger than it's armor
     self.destroyable = False
 

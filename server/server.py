@@ -29,6 +29,7 @@ class Handler(asyncore.dispatcher):
     self.handle_close()
 
   def sendJson(self, data):
+    print(json.dumps(data).encode())
     self.send(json.dumps(data).encode())
 
   def sendResult(self, result):

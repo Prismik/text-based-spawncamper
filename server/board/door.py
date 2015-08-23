@@ -1,11 +1,11 @@
 from . tile import Tile
 
 class Door(Tile):
-  def __init__(self):
+  def __init__(self, x, y):
     self.destroyable = False 
     self.opened = False
     self.armor = 100
-    super().__init__(False, False, 'd', 'You see an opened door' if self.opened else 'You see a closed door')
+    super().__init__(False, False, 'd', 'You see an opened door' if self.opened else 'You see a closed door', x, y)
   
   def open(self):
     self.opened = True
